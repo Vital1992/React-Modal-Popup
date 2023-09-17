@@ -1,31 +1,27 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import Modal from './Modal'
+import { useNavigate, Route, Routes } from 'react-router-dom';
+import MessageModule from './message';
+import GetUsers from './getUsers';
+import TicTac from './game/ticTac';
+import TicTacComputer from './game/ticTacComputer';
 
-const BUTTON_WRAPPER_STYLES = {
-  position: 'relative',
-  zIndex: 1
-}
-
-const OTHER_CONTENT_STYLES = {
-  position: 'relative',
-  zIndex: 2,
-  backgroundColor: 'red',
-  padding: '10px'
-}
 
 export default function App() {
-  const [isOpen, setIsOpen] = useState(false)
+  const navigate = useNavigate();
+
   return (
-    <>
-      <div style={BUTTON_WRAPPER_STYLES} onClick={() => console.log('clicked')}>
-        <button onClick={() => setIsOpen(true)}>Open Modal</button>
-
-        <Modal open={isOpen} onClose={() => setIsOpen(false)}>
-          Fancy Modal
-        </Modal>
-      </div>
-
-      <div style={OTHER_CONTENT_STYLES}>Other Content</div>
-    </>
+    <div>
+      <button onClick={()=>{ navigate("/"); }}>Go to Home</button>
+      <button onClick={()=>{ navigate("/getUsers"); }}>Go to Get Users example</button>
+      <button onClick={()=>{ navigate("/game"); }}>Play Tic Tac Toe</button>
+      <button onClick={()=>{ navigate("/gameWithComputer"); }}>Play Tic Tac Toe With Computer</button>
+      <Routes>
+        <Route path={"/"} element={<MessageModule />} />
+        <Route path={"/getUsers"} element={<GetUsers />} />
+        <Route path={"/game"} element={<TicTac />} />
+        <Route path={"/gameWithComputer"} element={<TicTacComputer />} />
+      </Routes>
+    </div>
   )
 }
