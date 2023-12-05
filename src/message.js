@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import Modal from './Modal'
 import { BrowserRouter, Navigate, Route, Routes } from 'react-router-dom';
+import LineChart from './chart';
 
 const BUTTON_WRAPPER_STYLES = {
   position: 'relative',
@@ -70,6 +71,10 @@ export default function MessageModule() {
 
       <div style={OTHER_CONTENT_STYLES}>Other Content</div>
       <Message/>
+      <div>
+      <h1>Wave Chart Graph</h1>
+      <LineChart />
+    </div>
     </>
   )
 }

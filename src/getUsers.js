@@ -30,7 +30,16 @@ export default function GetUsers() {
       setData(res.results)
     })
   },[])
-  
+
+function Click ({callback}) {
+  return [0, 0].map((cur, idx) => {
+    return <button onClick={(e) => {callback(idx)}}>Click button idndex: {idx}</button>
+  })
+}
+
+function Print (e) {
+  console.log(e)
+}
   
   return (
     <>
@@ -50,6 +59,7 @@ export default function GetUsers() {
           })
           setPageNum(pageNum + 1)
         }}>Load more</button>
+        <Click callback={(e) => {Print(e)}}></Click>
     </>
   )
 }
