@@ -66,3 +66,50 @@ This section has moved here: https://facebook.github.io/create-react-app/docs/de
 ### `npm run build` fails to minify
 
 This section has moved here: https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify
+
+import \* as React from "react";
+import { render } from "react-dom";
+import { useContext } from "react";
+const themes = {
+light: {
+foreground: "#000000",
+
+    background: "#eeeeee",
+
+},
+
+dark: {
+foreground: "#ffffff",
+
+    background: "#222222",
+
+},
+};
+
+const ThemeContext = React.createContext(themes.light);
+
+function ThemedButton() {
+// LINE TO FILL
+const theme = useContext(ThemeContext);
+return (
+<button style={{ background: theme.background, color: theme.foreground }}>
+Sample
+</button>
+);
+}
+
+function Toolbar() {
+return (
+<div>
+<ThemedButton />
+</div>
+);
+}
+
+export default function App() {
+return (
+<ThemeContext.Provider value={themes.dark}>
+<Toolbar />
+</ThemeContext.Provider>
+);
+}
