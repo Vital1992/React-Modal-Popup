@@ -21,18 +21,11 @@ export default function Messenger () {
   const [socketStatus, setSocketStatus] = useState()
 
   useEffect(() => {
-    setSocketStatus(socket.readyState)
-  }, [socket])
-
-  useEffect(() => {
     scroll()
   }, [output])
 
-  if (socketStatus !== 0) {
-    socket.onopen = function () {
-      // output.innerHTML += "Status: Connected\n";
-      // setOutput([...output, 'Status: Connected'])
-    }
+  socket.onopen = function () {
+      setSocketStatus(socket.readyState)
   }
 
   function scroll(){
@@ -41,17 +34,17 @@ export default function Messenger () {
   }
 
   function printOutput (userMsg) {
-    if (socketStatus !== 0) {
+    if (socketStatus === 1) {
       socket.onmessage = function (e) {
         setOutput([...output, userMsg, `GPT: ${e.data}`])
       }
-    } else if (socketStatus === 0) {
+    } else {
       setOutput([...output, userMsg, `GPT: genereic response`])
     }
   }
 
   async function btnClick () {
-    if (socketStatus !== 0) {
+    if (socketStatus === 1) {
       socket.send(input)
     }
     const userMsg = `Me: ${input}`
