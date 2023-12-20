@@ -1,35 +1,68 @@
 import React, { useState, useEffect } from 'react'
 
+const TEXT_AREA_STYLE = {
+  height: '400px',
+  width: '90%',
+  resize: "none",
+  padding: "15px"
+}
+
+const CONTAINER_STYLE = {
+  display: "flex",
+  flexDirection: "column",
+  alignItems: "center",
+}
+
 export default function Messenger () {
   let socket = new WebSocket('ws://localhost:8081/api/getMessage')
 
   const [input, setInput] = useState('')
   const [output, setOutput] = useState([])
+  const [socketStatus, setSocketStatus] = useState()
 
-  socket.onopen = function () {
-    // output.innerHTML += "Status: Connected\n";
-    // setOutput([...output, 'Status: Connected'])
+  useEffect(() => {
+    setSocketStatus(socket.readyState)
+  }, [socket])
+
+  useEffect(() => {
+    scroll()
+  }, [output])
+
+  if (socketStatus !== 0) {
+    socket.onopen = function () {
+      // output.innerHTML += "Status: Connected\n";
+      // setOutput([...output, 'Status: Connected'])
+    }
+  }
+
+  function scroll(){
+    const htmlOutput = document.getElementById("output")
+    htmlOutput.scrollTop = htmlOutput.scrollHeight;
   }
 
   function printOutput (userMsg) {
-    socket.onmessage = function (e) {
-      setOutput([...output, userMsg, `GPT: ${e.data}`])
-      console.log(output)
-      console.log(e.data)
+    if (socketStatus !== 0) {
+      socket.onmessage = function (e) {
+        setOutput([...output, userMsg, `GPT: ${e.data}`])
+      }
+    } else if (socketStatus === 0) {
+      setOutput([...output, userMsg, `GPT: genereic response`])
     }
   }
 
   async function btnClick () {
-    socket.send(input)
+    if (socketStatus !== 0) {
+      socket.send(input)
+    }
     const userMsg = `Me: ${input}`
     printOutput(userMsg)
     setInput('')
   }
 
   return (
-    <div>
+    <div style={CONTAINER_STYLE}>
       <h1>Talk to Chat GPT</h1>
-      <textarea id='output' value={output.join('\r\n')}></textarea>
+      <textarea style={TEXT_AREA_STYLE} id='output' value={output.join('\r\n')}></textarea>
       <h1>Enter message</h1>
       <input
         type='text'
